@@ -1,5 +1,5 @@
 package command;
 
 public enum Argument {
-	projet, task;
+	project, task;
 }

@@ -9,7 +9,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import command.Argument;
 import command.Command;
+import command.CommandFactory;
+import command.KeyWord;
 
 public final class TaskList implements Runnable {
 	private static final String QUIT = "quit";
@@ -44,34 +47,35 @@ public final class TaskList implements Runnable {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			if (input.equals(Command.quit)) {
+			if (input.equals(KeyWord.quit)) {
 				break;
 			}
-			try {
-				Command.valueOf(input.split(" ")[0]);
-				execute(Command.valueOf(input));
-			} catch (java.lang.IllegalArgumentException e) {
+			CommandFactory factory = new CommandFactory();
+
+			Command command = factory.getCommandFromString(input);
+
+			if (command == null) {
 				error(input);
+			} else {
+				execute(command);
 			}
+
 		}
 	}
 
-	private void execute(Command commandLine) {
-		String[] args = commandLine.toString().split(" ", 2);
-		System.out.println(args);
-		Command command = Command.valueOf(args[0]);
-		switch (command) {
+	private void execute(Command command) {
+		switch (command.getKeyWord()) {
 		case show:
 			show();
 			break;
 		case add:
-			add(args[1]);
+			add(command);
 			break;
 		case check:
-			check(args[1]);
+			check(command.getParameter());
 			break;
 		case uncheck:
-			uncheck(args[1]);
+			uncheck(command.getParameter());
 			break;
 		case help:
 			help();
@@ -93,14 +97,17 @@ public final class TaskList implements Runnable {
 		}
 	}
 
-	private void add(String commandLine) {
-		String[] subcommandRest = commandLine.split(" ", 2);
-		String subcommand = subcommandRest[0];
-		if (subcommand.equals("project")) {
-			addProject(subcommandRest[1]);
-		} else if (subcommand.equals("task")) {
-			String[] projectTask = subcommandRest[1].split(" ", 2);
-			addTask(projectTask[0], projectTask[1]);
+	private void add(Command command) {
+		switch (command.getArg()) {
+		case project:
+			addProject(command.getParameter());
+			break;
+		case task:
+			addTask(command.getParameter());
+			break;
+		default:
+			err.println("This should not be seen");
+			break;
 		}
 	}
 
@@ -108,23 +115,25 @@ public final class TaskList implements Runnable {
 		tasks.put(name, new ArrayList<Task>());
 	}
 
-	private void addTask(String project, String description) {
-		List<Task> projectTasks = tasks.get(project);
+	private void addTask(String parameter) {
+		String[] args = parameter.split(" ", 2);
+		List<Task> projectTasks = tasks.get(args[0]);
 		if (projectTasks == null) {
 			out.printf("Could not find a project with the name \"%s\".",
-					project);
+					args[0]);
 			out.println();
 			return;
 		}
-		projectTasks.add(new Task(nextId(), description, false));
+		projectTasks.add(new Task(nextId(), args[1], false));
 	}
 
-	private void check(String idString) {
-		setDone(idString, true);
+	private void check(String parameter) {
+		System.out.println(parameter);
+		setDone(parameter, true);
 	}
 
-	private void uncheck(String idString) {
-		setDone(idString, false);
+	private void uncheck(String parameter) {
+		setDone(parameter, false);
 	}
 
 	private void setDone(String idString, boolean done) {
