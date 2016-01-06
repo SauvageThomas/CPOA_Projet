@@ -31,7 +31,7 @@ public final class TaskList implements Runnable {
 
 	public void run() {
 		while (true) {
-			out.print("> ");
+			out.print(">");
 			out.flush();
 			String command;
 			try {
