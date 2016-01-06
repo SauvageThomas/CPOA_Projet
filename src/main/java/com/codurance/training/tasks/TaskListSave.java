@@ -9,64 +9,72 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class TaskList implements Runnable {
-	private static final String QUIT = "quit";
+public final class TaskListSave implements Runnable {
 
 	private final Map<String, List<Task>> tasks = new LinkedHashMap<>();
 	private final BufferedReader in;
 	private final PrintWriter out;
+	private final PrintWriter err;
 
 	private long lastId = 0;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		PrintWriter out = new PrintWriter(System.out);
-		new TaskList(in, out).run();
+		PrintWriter err = new PrintWriter(System.err);
+		new TaskListSave(in, out, err).run();
 	}
 
-	public TaskList(BufferedReader reader, PrintWriter writer) {
+	public TaskListSave(BufferedReader reader, PrintWriter writer, PrintWriter err) {
 		this.in = reader;
 		this.out = writer;
+		this.err = err;
 	}
 
 	public void run() {
 		while (true) {
-			out.print("> ");
+			out.print(">>");
 			out.flush();
-			String command;
+			String input;
 			try {
-				command = in.readLine();
+				input = in.readLine();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			if (command.equals(QUIT)) {
+			if (input.equals("quit"/*Command.quit*/)) {
 				break;
 			}
-			execute(command);
+			try {
+				Command command = Command.valueOf(input);
+				execute(command);
+			} catch (java.lang.IllegalArgumentException e) {
+				error(input);
+			}
 		}
 	}
 
-	private void execute(String commandLine) {
-		String[] commandRest = commandLine.split(" ", 2);
-		String command = commandRest[0];
+	private void execute(Command commandLine) {
+		String[] args = commandLine.toString().split(" ", 2);
+		Command command = Command.valueOf(args[0]);
 		switch (command) {
-		case "show":
+		case show:
 			show();
 			break;
-		case "add":
-			add(commandRest[1]);
+		case add:
+			add(args[1]);
 			break;
-		case "check":
-			check(commandRest[1]);
+		case check:
+			check(args[1]);
 			break;
-		case "uncheck":
-			uncheck(commandRest[1]);
+		case uncheck:
+			uncheck(args[1]);
 			break;
-		case "help":
+		case help:
 			help();
 			break;
 		default:
-			error(command);
+
+			error(command.toString());
 			break;
 		}
 	}
@@ -141,8 +149,11 @@ public final class TaskList implements Runnable {
 	}
 
 	private void error(String command) {
-		out.printf("I don't know what the command \"%s\" is.", command);
-		out.println();
+		out.print("I don't know what the command \"" + command + "\" is.\n");
+		//err.flush();
+		//out.println();
+		//out.println();
+		out.flush();
 	}
 
 	private long nextId() {
