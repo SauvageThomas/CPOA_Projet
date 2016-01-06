@@ -1,4 +1,4 @@
-package main.java.com.codurance.training.tasks;
+package app;
 
 import java.util.*;
 

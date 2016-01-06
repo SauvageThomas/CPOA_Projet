@@ -1,7 +1,8 @@
-package test.java.com.codurance.training.tasks;
+package tests;
 
 import static java.lang.System.lineSeparator;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,13 +11,11 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintWriter;
 
-import static org.hamcrest.Matchers.is;
-import main.java.com.codurance.training.tasks.TaskList;
-import main.java.com.codurance.training.tasks.TaskListSave;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import app.TaskList;
 
 public final class ApplicationTest {
 	public static final String PROMPT = "> ";
@@ -34,7 +33,7 @@ public final class ApplicationTest {
 				new PipedInputStream(inStream)));
 		PrintWriter out = new PrintWriter(new PipedOutputStream(outStream),
 				true);
-		TaskList taskList = new TaskList(in, out);
+		TaskList taskList = new TaskList(in, out, new PrintWriter(System.err));
 		applicationThread = new Thread(taskList);
 	}
 
@@ -55,16 +54,12 @@ public final class ApplicationTest {
 
 	@Test(timeout = 1000)
 	public void it_works() throws IOException {
-		
-		System.out.println("1");
+
 		execute("show");
-		System.out.println("2");
 
 		execute("add project secrets");
 		execute("add task secrets Eat more donuts.");
 		execute("add task secrets Destroy all humans.");
-
-		System.out.println("3");
 
 		execute("show");
 		readLines("secrets", "    [ ] 1: Eat more donuts.",
