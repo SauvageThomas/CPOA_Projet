@@ -9,18 +9,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import command.Argument;
-import command.Command;
-import command.CommandFactory;
-import command.KeyWord;
+import app.command.Argument;
+import app.command.Command;
+import app.command.CommandFactory;
+import app.command.KeyWord;
 
 public final class TaskList implements Runnable {
 	private static final String QUIT = "quit";
 
-	private final Map<String, List<Task>> tasks = new LinkedHashMap<>();
+	private final List<Project> projects = new ArrayList<Project>();
 	private final BufferedReader in;
 	private final PrintWriter out;
 	private final PrintWriter err;
+	private boolean alive = true;
 
 	private long lastId = 0;
 
@@ -38,7 +39,7 @@ public final class TaskList implements Runnable {
 	}
 
 	public void run() {
-		while (true) {
+		while (alive) {
 			out.print("> ");
 			out.flush();
 			String input;
@@ -46,9 +47,6 @@ public final class TaskList implements Runnable {
 				input = in.readLine();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
-			}
-			if (input.equals(KeyWord.quit)) {
-				break;
 			}
 			CommandFactory factory = new CommandFactory();
 
@@ -80,6 +78,9 @@ public final class TaskList implements Runnable {
 		case help:
 			help();
 			break;
+		case quit:
+			alive = false;
+			break;
 		default:
 			error(command.toString());
 			break;
@@ -87,9 +88,9 @@ public final class TaskList implements Runnable {
 	}
 
 	private void show() {
-		for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
-			out.println(project.getKey());
-			for (Task task : project.getValue()) {
+		for (Project project : projects) {
+			out.println(project.getName());
+			for (Task task : project.getList()) {
 				out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '),
 						task.getId(), task.getDescription());
 			}
@@ -112,23 +113,35 @@ public final class TaskList implements Runnable {
 	}
 
 	private void addProject(String name) {
-		tasks.put(name, new ArrayList<Task>());
+		projects.add(new Project(nextId(), name));
+	}
+	
+	private int getPosOf(String name) {
+		int pos = -1;
+		for (Project project : projects) {
+			if (project.getName().equals(name)) {
+				pos = projects.indexOf(project);
+				break;
+			}
+		}
+		return pos;
 	}
 
 	private void addTask(String parameter) {
 		String[] args = parameter.split(" ", 2);
-		List<Task> projectTasks = tasks.get(args[0]);
-		if (projectTasks == null) {
+
+		int pos = getPosOf(args[0]);
+		if (pos == -1) {
 			out.printf("Could not find a project with the name \"%s\".",
 					args[0]);
 			out.println();
 			return;
 		}
-		projectTasks.add(new Task(nextId(), args[1], false));
+		Project project = projects.get(pos);
+		project.addTask(new Task(nextId(), args[1], false));
 	}
 
 	private void check(String parameter) {
-		System.out.println(parameter);
 		setDone(parameter, true);
 	}
 
@@ -138,8 +151,8 @@ public final class TaskList implements Runnable {
 
 	private void setDone(String idString, boolean done) {
 		int id = Integer.parseInt(idString);
-		for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
-			for (Task task : project.getValue()) {
+		for (Project project : projects) {
+			for (Task task : project.getList()) {
 				if (task.getId() == id) {
 					task.setDone(done);
 					return;

@@ -1,4 +1,4 @@
-package command;
+package app.command;
 
 public class Command {
 

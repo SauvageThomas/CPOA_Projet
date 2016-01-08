@@ -1,4 +1,4 @@
-package command;
+package app.command;
 
 public class CommandFactory {
 
@@ -15,14 +15,13 @@ public class CommandFactory {
 		try {
 			keyWord = KeyWord.valueOf(args[0]);
 		} catch (java.lang.IllegalArgumentException e) {
-			System.out.println("Non valide");
 			return null;
 		}
 
 		// Si mots clé unique (help, show)
 		if (args.length == 1) {
-			System.out.println("help/show");
-			if (keyWord.equals(KeyWord.help) || keyWord.equals(KeyWord.show)) {
+			//System.out.println("help/show/quit");
+			if (keyWord.equals(KeyWord.help) || keyWord.equals(KeyWord.show)|| keyWord.equals(KeyWord.quit)) {
 				return new Command(keyWord);
 			}
 			return null;
@@ -56,8 +55,8 @@ public class CommandFactory {
 		}
 		// Sinon (add, remove)
 
-		System.out.println(tmp[1]);
-		System.out.println("add");
+		//System.out.println(tmp[1]);
+		//System.out.println("add");
 		return new Command(keyWord, arg, tmp[1]);
 	}
 }
