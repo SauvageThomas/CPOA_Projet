@@ -260,7 +260,16 @@ public final class TaskList implements Runnable {
 	}
 
 	private void setDone(String idString, boolean done) {
-		int id = Integer.parseInt(idString);
+		
+		int id = -1;
+		try {
+			id = Integer.parseInt(idString);
+		} catch (Exception e) {
+			out.println("The id '" + idString + "' is not a correct id.");
+			return;
+		}
+		
+		id = Integer.parseInt(idString);
 		for (Project project : projects) {
 			for (Task task : project.getList()) {
 				if (task.getId() == id) {

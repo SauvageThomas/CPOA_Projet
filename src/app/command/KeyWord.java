@@ -3,11 +3,13 @@ package app.command;
 public enum KeyWord {
 
 	show {
+		@Override
 		public int getLen() {
 			return 1;
 		}
 	},
 	add {
+		@Override
 		public int getLenArg(Argument arg) {
 			switch (arg) {
 			case task:
@@ -22,12 +24,13 @@ public enum KeyWord {
 			}
 
 		}
-		
+		@Override
 		public boolean hasArgument() {
 			return true;
 		}
 	},
 	remove {
+		@Override
 		public int getLen() {
 			return 3;
 		}
@@ -37,31 +40,37 @@ public enum KeyWord {
 		}
 	},
 	check {
+		@Override
 		public int getLen() {
 			return 2;
 		}
 	},
 	uncheck {
+		@Override
 		public int getLen() {
 			return 2;
 		}
 	},
 	help {
+		@Override
 		public int getLen() {
 			return 1;
 		}
 	},
 	quit {
+		@Override
 		public int getLen() {
 			return 1;
 		}
 	},
 	deadline {
+		@Override
 		public int getLen() {
 			return 3;
 		}
 	},
 	today {
+		@Override
 		public int getLen() {
 			return 1;
 		}
