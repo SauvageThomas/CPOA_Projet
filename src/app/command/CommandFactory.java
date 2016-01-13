@@ -3,8 +3,7 @@ package app.command;
 public class CommandFactory {
 
 	public Command getCommandFromString(String commandLine) {
-
-		String[] args = commandLine.split(" ", 2);
+		String[] args = commandLine.split(" ");
 
 		KeyWord keyWord;
 		try {
@@ -13,48 +12,71 @@ public class CommandFactory {
 			return null;
 		}
 
-		// Si mots clé unique (help, show)
-		if (args.length == 1) {
-			// System.out.println("help/show/quit/today");
-			if (keyWord.equals(KeyWord.help) || keyWord.equals(KeyWord.show)
-					|| keyWord.equals(KeyWord.quit)
-					|| keyWord.equals(KeyWord.today)) {
-				return new Command(keyWord);
+		Argument arg = null;
+		if (args.length > 1) {
+			try {
+				arg = Argument.valueOf(args[1]);
+			} catch (java.lang.IllegalArgumentException e) {
 			}
-			return null;
 		}
 
-		String[] tmp = args[1].split(" ", 2);
+		switch (args.length) {
+		case 1:
+			if (keyWord.getLen() == 1) {
+				return new Command(keyWord);
+			} else {
+				return null;
+			}
+		case 2:
+			if (keyWord.getLen() == 2) {
+				return new Command(keyWord, args[1]);
+			} else {
+				return null;
+			}
+		case 3:
 
-		Argument arg;
-		try {
-			arg = Argument.valueOf(tmp[0]);
-		} catch (java.lang.IllegalArgumentException e) {
+			if (keyWord.hasArgument()) {
+				if (arg == null) {
+					return null;
+				}
 
-			try {
-				Argument.valueOf(args[0]);
-			} catch (java.lang.IllegalArgumentException r) {
+				if (keyWord.getLen() == -1) {
+					if (keyWord.getLenArg(arg) == 3) {
+						return new Command(keyWord, arg, args[2]);
+					} else {
+						return null;
+					}
+				}
 
-				// Si mot clé + string (check <task>, uncheck <task>)
-
-				if (tmp.length == 1) {
-					return new Command(keyWord, tmp[0]);
+				if (keyWord.getLen() == 3) {
+					return new Command(keyWord, arg, args[2]);
 				} else {
-					return new Command(keyWord, tmp[0] + " " + tmp[1]);
+					return null;
+				}
+			} else {
+				if (keyWord.getLen() == 3) {
+					return new Command(keyWord, args[1] + " " + args[2]);
+				} else {
+					return null;
+				}
+			}
+		case 4:
+
+			if (arg == null) {
+				return null;
+			}
+
+			if (keyWord.getLen() == -1) {
+				if (keyWord.getLenArg(arg) == 4) {
+					return new Command(keyWord, arg, args[2] + " " + args[3]);
+				} else {
+					return null;
 				}
 			}
 
+		default:
 			return null;
 		}
 
-		if (tmp.length == 1) {
-			return null;
-		}
-
-		// (add, remove)
-
-		// System.out.println(tmp[1]);
-		// System.out.println("add");
-		return new Command(keyWord, arg, tmp[1]);
 	}
 }
