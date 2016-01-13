@@ -223,7 +223,7 @@ public final class TaskList implements Runnable {
 	}
 
 	private void addProject(String name) {
-		projects.add(new Project(nextId(), name));
+		projects.add(new Project(name));
 	}
 
 	private int getPosOf(String name) {
