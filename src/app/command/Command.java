@@ -2,6 +2,12 @@ package app.command;
 
 public class Command {
 
+	@Override
+	public String toString() {
+		return keyWord.toString() + " " + arg.toString() + " "
+				+ parameter.toString();
+	}
+
 	private KeyWord keyWord;
 	private Argument arg;
 	private String parameter;
@@ -19,7 +25,6 @@ public class Command {
 	Command(KeyWord keyWord, String parameter) {
 		this.setKeyWord(keyWord);
 		this.parameter = parameter;
-
 	}
 
 	public KeyWord getKeyWord() {

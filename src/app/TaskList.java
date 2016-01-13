@@ -4,15 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
 
-import app.command.Argument;
 import app.command.Command;
 import app.command.CommandFactory;
-import app.command.KeyWord;
 
 public final class TaskList implements Runnable {
 	private static final String QUIT = "quit";
@@ -69,6 +69,9 @@ public final class TaskList implements Runnable {
 		case add:
 			add(command);
 			break;
+		case remove:
+			remove(command);
+			break;
 		case check:
 			check(command.getParameter());
 			break;
@@ -81,10 +84,72 @@ public final class TaskList implements Runnable {
 		case quit:
 			alive = false;
 			break;
+		case deadline:
+			setDeadline(command.getParameter());
+			break;
+		case today:
+			today();
+			break;
 		default:
 			error(command.toString());
 			break;
 		}
+	}
+
+	private void today() {
+		
+		SimpleDateFormat formatter = new SimpleDateFormat(
+				"dd-MM-yy");
+		
+		String today = formatter.format(new Date());
+		
+		
+		boolean found = false;
+		for (Project p : projects) {
+			for (Task task : p.getList()) {
+				if (formatter.format(task.getDeadline()).equals(today)) {
+					
+					out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '),
+							task.getId(), task.getDescription());
+					
+					found = true;
+				}
+			}
+		}
+		if (!found) {
+			out.printf("There is no task to do today.");
+			out.println();
+		}
+	}
+
+	private void setDeadline(String parameter) {
+		String[] args = parameter.split(" ", 2);
+
+		boolean found = false;
+		for (Project p : projects) {
+			for (Task task : p.getList()) {
+				if (String.valueOf(task.getId()).equals(args[0])) {
+
+					SimpleDateFormat formatter = new SimpleDateFormat(
+							"dd-MM-yy");
+					Date date;
+					try {
+						date = formatter.parse(args[1]);
+						task.setDeadline(date);
+					} catch (ParseException e) {
+						System.out
+								.println("Error, the date is not conform (Ex : 02-06-16");
+					}
+
+					found = true;
+				}
+			}
+		}
+		if (!found) {
+			out.printf("Could not find a task with the id \"%s\".", args[0]);
+			out.println();
+		}
+
 	}
 
 	private void show() {
@@ -112,10 +177,55 @@ public final class TaskList implements Runnable {
 		}
 	}
 
+	private void remove(Command command) {
+		switch (command.getArg()) {
+		case project:
+			removeProject(command.getParameter());
+			break;
+		case task:
+			removeTask(command.getParameter());
+			break;
+		default:
+			err.println("This should not be seen");
+			break;
+		}
+	}
+
+	private void removeProject(String parameter) {
+		int pos = getPosOf(parameter);
+		if (pos == -1) {
+			out.printf("Could not find a project with the name \"%s\".",
+					parameter);
+			out.println();
+		} else {
+			projects.remove(pos);
+		}
+	}
+
+	private void removeTask(String parameter) {
+
+		boolean found = false;
+		for (Project p : projects) {
+			ListIterator<Task> iterator = p.getList().listIterator();
+			while (iterator.hasNext()) {
+				Task task = iterator.next();
+				if (String.valueOf(task.getId()).equals(parameter)) {
+					iterator.remove();
+					found = true;
+				}
+			}
+		}
+		if (!found) {
+			out.printf("Could not find a task with the id \"%s\".", parameter);
+			out.println();
+		}
+
+	}
+
 	private void addProject(String name) {
 		projects.add(new Project(nextId(), name));
 	}
-	
+
 	private int getPosOf(String name) {
 		int pos = -1;
 		for (Project project : projects) {
@@ -167,9 +277,13 @@ public final class TaskList implements Runnable {
 		out.println("Commands:");
 		out.println("  show");
 		out.println("  add project <project name>");
+		out.println("  remove project <project name>");
+		out.println("  remove task <task ID>");
 		out.println("  add task <project name> <task description>");
 		out.println("  check <task ID>");
 		out.println("  uncheck <task ID>");
+		out.println("  deadline <ID> <date>");
+		out.println("  today");
 		out.println();
 	}
 

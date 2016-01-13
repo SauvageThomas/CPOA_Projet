@@ -2,11 +2,6 @@ package app.command;
 
 public class CommandFactory {
 
-	Command command;
-
-	public CommandFactory() {
-	}
-
 	public Command getCommandFromString(String commandLine) {
 
 		String[] args = commandLine.split(" ", 2);
@@ -20,8 +15,10 @@ public class CommandFactory {
 
 		// Si mots clé unique (help, show)
 		if (args.length == 1) {
-			//System.out.println("help/show/quit");
-			if (keyWord.equals(KeyWord.help) || keyWord.equals(KeyWord.show)|| keyWord.equals(KeyWord.quit)) {
+			// System.out.println("help/show/quit/today");
+			if (keyWord.equals(KeyWord.help) || keyWord.equals(KeyWord.show)
+					|| keyWord.equals(KeyWord.quit)
+					|| keyWord.equals(KeyWord.today)) {
 				return new Command(keyWord);
 			}
 			return null;
@@ -38,10 +35,15 @@ public class CommandFactory {
 				Argument.valueOf(args[0]);
 			} catch (java.lang.IllegalArgumentException r) {
 
-				return new Command(keyWord, tmp[0]);
+				// Si mot clé + string (check <task>, uncheck <task>)
+
+				if (tmp.length == 1) {
+					return new Command(keyWord, tmp[0]);
+				} else {
+					return new Command(keyWord, tmp[0] + " " + tmp[1]);
+				}
 			}
 
-			// Si mot clé + string (check <task>, uncheck <task>)
 			return null;
 		}
 
@@ -49,14 +51,10 @@ public class CommandFactory {
 			return null;
 		}
 
-		if (Argument.valueOf(tmp[0]).equals(Argument.task)
-				&& tmp[1].split(" ").length == 1) {
-			return null;
-		}
-		// Sinon (add, remove)
+		// (add, remove)
 
-		//System.out.println(tmp[1]);
-		//System.out.println("add");
+		// System.out.println(tmp[1]);
+		// System.out.println("add");
 		return new Command(keyWord, arg, tmp[1]);
 	}
 }

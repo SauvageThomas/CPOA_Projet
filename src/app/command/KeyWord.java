@@ -1,5 +1,5 @@
 package app.command;
 
 public enum KeyWord {
-	show, add, check, uncheck, help, quit;
+	show, add, remove, check, uncheck, help, quit, deadline, today;
 }
