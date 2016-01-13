@@ -60,7 +60,7 @@ public class CommandFactory {
 					return null;
 				}
 			}
-		case 4:
+		default:
 
 			if (arg == null) {
 				return null;
@@ -68,15 +68,14 @@ public class CommandFactory {
 
 			if (keyWord.getLen() == -1) {
 				if (keyWord.getLenArg(arg) == 4) {
-					return new Command(keyWord, arg, args[2] + " " + args[3]);
+					return new Command(keyWord, arg,
+							commandLine.split(" ", 3)[2]);
 				} else {
 					return null;
 				}
+			} else {
+				return null;
 			}
-
-		default:
-			return null;
 		}
-
 	}
 }
