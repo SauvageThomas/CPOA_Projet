@@ -12,42 +12,61 @@ public class Command {
 	private Argument arg;
 	private String parameter;
 
+	/**
+	 * The 	Command constructor simply permits to create a Command with only one word (keyword).
+	 * @param keyWord
+	 */
 	Command(KeyWord keyWord) {
-		this.setKeyWord(keyWord);
+		this.keyWord=keyWord;
 	}
 
+	/**
+	 * The 	Command constructor simply permits to create a Command with a keyword, an argument, and parameters.
+	 * @param keyWord
+	 * @param arg
+	 * @param parameter
+	 */
 	Command(KeyWord keyWord, Argument arg, String parameter) {
-		this.setKeyWord(keyWord);
+		this.keyWord=keyWord;
 		this.arg = arg;
 		this.parameter = parameter;
 	}
 
+	
+	/**
+	 * The 	Command constructor simply permits to create a Command with a keyword and parameters.
+	 * @param keyWord
+	 * @param parameter
+	 */
 	Command(KeyWord keyWord, String parameter) {
-		this.setKeyWord(keyWord);
+		this.keyWord=keyWord;
 		this.parameter = parameter;
 	}
 
+	/**
+	 * This getter return the first word of the command
+	 * @return keyword
+	 */
 	public KeyWord getKeyWord() {
 		return keyWord;
 	}
 
-	public void setKeyWord(KeyWord keyWord) {
-		this.keyWord = keyWord;
-	}
-
+	/**
+	 * This getter return the second word of a command ( project or task)
+	 * @return arg
+	 */
 	public Argument getArg() {
 		return arg;
 	}
 
-	public void setArg(Argument arg) {
-		this.arg = arg;
-	}
 
+
+	/**
+	 * This getter return the last part of a command (words excepted the keywords)
+	 * @return parameter
+	 */
 	public String getParameter() {
 		return parameter;
 	}
 
-	public void setParameter(String parameter) {
-		this.parameter = parameter;
-	}
 }

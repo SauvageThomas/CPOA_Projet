@@ -14,7 +14,6 @@ public class Project {
 	/**
 	 * 
 	 * The 	Project constructor simply permits to create a Project with an id and a name.
-	 * @param id
 	 * @param name
 	 */
 	public Project(String name) {
