@@ -15,7 +15,6 @@ import app.command.Command;
 import app.command.CommandFactory;
 
 public final class TaskList implements Runnable {
-	private static final String QUIT = "quit";
 
 	private final List<Project> projects = new ArrayList<Project>();
 	private final BufferedReader in;
