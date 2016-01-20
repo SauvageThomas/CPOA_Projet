@@ -90,6 +90,19 @@ public final class ApplicationTest {
 				"    [x] 6: Primitive Obsession", "    [ ] 7: Outside-In TDD",
 				"    [ ] 8: Interaction-Driven Design", "");
 
+		execute("uncheck 1");
+		
+		execute("remove task 2");
+		execute("remove project training");
+		execute("show");
+		
+		readLines("secrets", "    [ ] 1: Eat more donuts.","");
+		
+		execute("deadline 1 23-12-2015");
+		execute("today");
+		
+		readLines("There is no task to do today.");
+
 		execute("quit");
 	}
 
