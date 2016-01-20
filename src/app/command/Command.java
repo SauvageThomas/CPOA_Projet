@@ -32,7 +32,6 @@ public class Command {
 		this.parameter = parameter;
 	}
 
-	
 	/**
 	 * The 	Command constructor simply permits to create a Command with a keyword and parameters.
 	 * @param keyWord
@@ -59,14 +58,16 @@ public class Command {
 		return arg;
 	}
 
-
-
 	/**
 	 * This getter return the last part of a command (words excepted the keywords)
 	 * @return parameter
 	 */
 	public String getParameter() {
 		return parameter;
+	}
+	
+	public void execute() {
+		keyWord.execute(arg, parameter);
 	}
 
 }

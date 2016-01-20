@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
+import model.Project;
+import model.Task;
 import app.command.Command;
 import app.command.CommandFactory;
 
@@ -137,7 +139,7 @@ public final class TaskList implements Runnable {
 						task.setDeadline(date);
 					} catch (ParseException e) {
 						System.out
-								.println("Error, the date is not conform (Ex : 02-06-16");
+								.println("Error, the date is not conform (Ex : 02-06-16).");
 					}
 
 					found = true;
@@ -290,7 +292,7 @@ public final class TaskList implements Runnable {
 		out.println("  add task <project name> <task description>");
 		out.println("  check <task ID>");
 		out.println("  uncheck <task ID>");
-		out.println("  deadline <ID> <date>");
+		out.println("  deadline <task ID> <date>");
 		out.println("  today");
 		out.println();
 	}
