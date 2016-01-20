@@ -59,7 +59,7 @@ public class Application implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		Application.instance.run();
+		new Thread(Application.instance).start();;
 	}
 
 }
