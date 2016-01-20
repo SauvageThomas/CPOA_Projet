@@ -60,15 +60,14 @@ public final class ApplicationTest {
 	public void it_works() throws IOException {
 
 		execute("show");
-
 		execute("add project secrets");
 		execute("add task secrets Eat more donuts.");
 		execute("add task secrets Destroy all humans.");
-
 		execute("show");
+		
 		readLines("secrets", "    [ ] 1: Eat more donuts.",
 				"    [ ] 2: Destroy all humans.", "");
-
+		
 		execute("add project training");
 		execute("add task training Four Elements of Simple Design");
 		execute("add task training SOLID");
@@ -91,16 +90,12 @@ public final class ApplicationTest {
 				"    [ ] 8: Interaction-Driven Design", "");
 
 		execute("uncheck 1");
-		
 		execute("remove task 2");
 		execute("remove project training");
 		execute("show");
-		
 		readLines("secrets", "    [ ] 1: Eat more donuts.","");
-		
 		execute("deadline 1 23-12-2015");
-		execute("today");
-		
+		execute("today");	
 		readLines("There is no task to do today.");
 
 		execute("quit");
