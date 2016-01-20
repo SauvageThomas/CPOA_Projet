@@ -1,4 +1,6 @@
 @startuml
+
+package app {
 class Function {
 	+void error(String input)
 	+void show()
@@ -34,6 +36,53 @@ interface Runnable {
 Runnable <|.. Application
 
 
+}
+
+
+
+package command {
+class CommandFactory {
+	+Command getCommandFromString(String commandLine)
+}
+
+
+class Command {
+	-KeyWord keyWord
+	-Argument arg
+	-String parameter
+	+String toString()
+	~Command(KeyWord keyWord)
+	~Command(KeyWord keyWord, Argument arg, String parameter)
+	~Command(KeyWord keyWord, String parameter)
+	+KeyWord getKeyWord()
+	+Argument getArg()
+	+String getParameter()
+	+void execute()
+}
+}
+
+
+
+package model {
+enum Argument {
+	project
+	task
+}
+enum KeyWord {
+	show
+	add
+	remove
+	check
+	uncheck
+	help
+	quit
+	deadline
+	today
+	+int getLen()
+	+int getLenArg(Argument arg)
+	+boolean hasArgument()
+	{abstract} +Method getAssociatedFunction(Argument arg)
+}
 class Task {
 	-long id
 	-String description
@@ -58,55 +107,20 @@ class Project {
 	+String getName()
 	+void removeTask(Task tache)
 }
-
-enum KeyWord {
-	show
-	add
-	remove
-	check
-	uncheck
-	help
-	quit
-	deadline
-	today
-	+int getLen()
-	+int getLenArg(Argument arg)
-	+boolean hasArgument()
-	+Method getAssociatedFunction(Argument arg)
 }
 
+Application *-- CommandFactory
+Application ..> Function
+Application -->"*" Project
 
-class CommandFactory {
-	+Command getCommandFromString(String commandLine)
-}
+CommandFactory --> Command
 
+Project -->"*" Task
 
-class Command {
-	-KeyWord keyWord
-	-Argument arg
-	-String parameter
-	+String toString()
-	~Command(KeyWord keyWord)
-	~Command(KeyWord keyWord, Argument arg, String parameter)
-	~Command(KeyWord keyWord, String parameter)
-	+KeyWord getKeyWord()
-	+Argument getArg()
-	+String getParameter()
-	+void execute()
-}
+Command -->"1" KeyWord
+Command -->"0..1" Argument
 
-
-enum Argument {
-	project
-	task
-}
-
-package Model {
-
-}
-
-
-
+Command ..> Function
 
 
 @enduml

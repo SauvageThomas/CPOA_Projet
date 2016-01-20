@@ -8,30 +8,14 @@ import java.util.ListIterator;
 import model.Project;
 import model.Task;
 
-/**
- * 
- * The public class Function contains the totality of the functions that will be
- * used to manage the tasks and projects' changes.
- *
- */
-public class Function {
+public class Function2 {
 
-	/**
-	 * This function deal the cases when an error appeared.( when the command is
-	 * not correct for exemple)
-	 * 
-	 * @param input
-	 */
 	public static void error(String input) {
 		Application.out.println("I don't know what the command \"" + input
 				+ "\" is.");
 		Application.out.flush();
 	}
 
-	/**
-	 * The show function permit to display the list of projects with their own
-	 * tasks.
-	 */
 	public static void show() {
 		for (Project project : Application.projects) {
 			Application.out.println(project.getName());
@@ -44,12 +28,6 @@ public class Function {
 		}
 	}
 
-	/**
-	 * The addTask function permit to add a task to a given project.The
-	 * parameter correspond to the project name and the future task description.
-	 * 
-	 * @param parameter
-	 */
 	public static void addTask(String parameter) {
 		String[] args = parameter.split(" ", 2);
 
@@ -64,21 +42,10 @@ public class Function {
 		project.addTask(new Task(nextId(), args[1], false));
 	}
 
-	/**
-	 * Return the nexId for a task
-	 * 
-	 * @return next Id
-	 */
 	private static long nextId() {
 		return ++Application.lastId;
 	}
 
-	/**
-	 * Get the position of a project
-	 * 
-	 * @param parameter
-	 * @return position
-	 */
 	private static int getPosOf(String parameter) {
 		int pos = -1;
 		for (Project project : Application.projects) {
@@ -90,21 +57,10 @@ public class Function {
 		return pos;
 	}
 
-	/**
-	 * This function permit to add a new Project. The parameter correspond to
-	 * the name of the project.
-	 * 
-	 * @param parameter
-	 */
 	public static void addProject(String parameter) {
 		Application.projects.add(new Project(parameter));
 	}
 
-	/**
-	 * This function checks if there is project with a deadline corresponding to
-	 * the today date.
-	 *
-	 */
 	public static void today() {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
 
@@ -132,12 +88,6 @@ public class Function {
 		}
 	}
 
-	/**
-	 * This function remove a task. The parameter correspond to the name of the
-	 * task you want to remove.
-	 * 
-	 * @param parameter
-	 */
 	public static void removeTask(String parameter) {
 		boolean found = false;
 		for (Project p : Application.projects) {
@@ -158,12 +108,6 @@ public class Function {
 
 	}
 
-	/**
-	 * This function remove a task. The parameter correspond to the name of the
-	 * task you want to remove.
-	 * 
-	 * @param parameter
-	 */
 	public static void removeProject(String parameter) {
 		int pos = getPosOf(parameter);
 		if (pos == -1) {
@@ -177,24 +121,10 @@ public class Function {
 
 	}
 
-	/**
-	 * The check function permits to set a task Done when you consider you have
-	 * finish this task. The parameter corresponds to the task's id. This
-	 * function calls the setDone function
-	 * 
-	 * @param parameter
-	 */
 	public static void check(String parameter) {
 		setDone(parameter, true);
 	}
 
-	/**
-	 * The setDone function return a boolean indicating if a task is done or
-	 * not. The parameter corresponds to the task's id
-	 *
-	 * @param parameter
-	 * @param b
-	 */
 	private static void setDone(String parameter, boolean b) {
 		int id = -1;
 		try {
@@ -218,28 +148,15 @@ public class Function {
 		Application.out.println();
 	}
 
-	/**
-	 * The check function permits to set a task Done when you consider you have
-	 * finish this task. The parameter corresponds to the task's id. This
-	 * function calls the setDone function
-	 * 
-	 * @param parameter
-	 */
 	public static void uncheck(String parameter) {
 		setDone(parameter, false);
 	}
 
-	/**
-	 * This function allow to exit the application
-	 */
 	public static void quit() {
 		Application.kill();
 
 	}
 
-	/**
-	 * The help function displays the list of commands you could use.
-	 */
 	public static void help() {
 		Application.out.println("Commands:");
 		Application.out.println("  show");
@@ -255,14 +172,6 @@ public class Function {
 
 	}
 
-	/**
-	 * 
-	 * The deadline function permits to add a deadline to a given task. The
-	 * parameter correspond to the id of the task and the date you want to
-	 * enter.
-	 * 
-	 * @param parameter
-	 */
 	public static void deadline(String parameter) {
 		String[] args = parameter.split(" ", 2);
 
