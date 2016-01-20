@@ -20,8 +20,9 @@ public class Function {
 		for (Project project : Application.projects) {
 			Application.out.println(project.getName());
 			for (Task task : project.getList()) {
-				Application.out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '),
-						task.getId(), task.getDescription());
+				Application.out.printf("    [%c] %d: %s%n",
+						(task.isDone() ? 'x' : ' '), task.getId(),
+						task.getDescription());
 			}
 			Application.out.println();
 		}
@@ -32,12 +33,12 @@ public class Function {
 
 		int pos = getPosOf(args[0]);
 		if (pos == -1) {
-			Application.out.printf("Could not find a project with the name \"%s\".",
-					args[0]);
+			Application.out.printf(
+					"Could not find a project with the name \"%s\".", args[0]);
 			Application.out.println();
 			return;
 		}
-		Project project =Application.projects.get(pos);
+		Project project = Application.projects.get(pos);
 		project.addTask(new Task(nextId(), args[1], false));
 	}
 
@@ -61,20 +62,22 @@ public class Function {
 	}
 
 	public static void today() {
-		SimpleDateFormat formatter = new SimpleDateFormat(
-				"dd-MM-yy");
-		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy");
+
 		String today = formatter.format(new Date());
-		
-		
+
 		boolean found = false;
 		for (Project p : Application.projects) {
 			for (Task task : p.getList()) {
+				if (task.getDeadline() == null) {
+					continue;
+				}
 				if (formatter.format(task.getDeadline()).equals(today)) {
-					
-					Application.out.printf("    [%c] %d: %s%n", (task.isDone() ? 'x' : ' '),
-							task.getId(), task.getDescription());
-					
+
+					Application.out.printf("    [%c] %d: %s%n",
+							(task.isDone() ? 'x' : ' '), task.getId(),
+							task.getDescription());
+
 					found = true;
 				}
 			}
@@ -98,7 +101,8 @@ public class Function {
 			}
 		}
 		if (!found) {
-			Application.out.printf("Could not find a task with the id \"%s\".", parameter);
+			Application.out.printf("Could not find a task with the id \"%s\".",
+					parameter);
 			Application.out.println();
 		}
 
@@ -107,13 +111,14 @@ public class Function {
 	public static void removeProject(String parameter) {
 		int pos = getPosOf(parameter);
 		if (pos == -1) {
-			Application.out.printf("Could not find a project with the name \"%s\".",
-					parameter);
+			Application.out
+					.printf("Could not find a project with the name \"%s\".",
+							parameter);
 			Application.out.println();
 		} else {
 			Application.projects.remove(pos);
 		}
-		
+
 	}
 
 	public static void check(String parameter) {
@@ -125,10 +130,11 @@ public class Function {
 		try {
 			id = Integer.parseInt(parameter);
 		} catch (Exception e) {
-			Application.out.println("The id '" + parameter + "' is not a correct id.");
+			Application.out.println("The id '" + parameter
+					+ "' is not a correct id.");
 			return;
 		}
-		
+
 		id = Integer.parseInt(parameter);
 		for (Project project : Application.projects) {
 			for (Task task : project.getList()) {
@@ -190,7 +196,8 @@ public class Function {
 			}
 		}
 		if (!found) {
-			Application.out.printf("Could not find a task with the id \"%s\".", args[0]);
+			Application.out.printf("Could not find a task with the id \"%s\".",
+					args[0]);
 			Application.out.println();
 		}
 	}

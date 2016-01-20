@@ -16,12 +16,12 @@ public class Application implements Runnable {
 
 	public static final Application instance = new Application();
 
-	public static BufferedReader in = new BufferedReader(
-			new InputStreamReader(System.in));
+	public static BufferedReader in = new BufferedReader(new InputStreamReader(
+			System.in));
 	public static PrintWriter out = new PrintWriter(System.out);
-	
+
 	public static List<Project> projects = new ArrayList<Project>();
-	
+
 	private static boolean alive = true;
 
 	public static int lastId = 0;
@@ -40,7 +40,7 @@ public class Application implements Runnable {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			
+
 			CommandFactory factory = new CommandFactory();
 
 			Command command = factory.getCommandFromString(input);
@@ -59,7 +59,8 @@ public class Application implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		new Thread(Application.instance).start();;
+		new Thread(Application.instance).start();
+		;
 	}
 
 }
