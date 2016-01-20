@@ -61,7 +61,6 @@ public class CommandFactory {
 				}
 			}
 		default:
-
 			if (arg == null) {
 				return null;
 			}

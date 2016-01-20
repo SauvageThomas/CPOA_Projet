@@ -28,15 +28,21 @@ public class Function {
 	}
 
 	public static void addTask(String parameter) {
-		int pos = getPosOf(parameter);
+		String[] args = parameter.split(" ", 2);
+
+		int pos = getPosOf(args[0]);
 		if (pos == -1) {
-			Application.out
-					.printf("Could not find a project with the name \"%s\".",
-							parameter);
+			Application.out.printf("Could not find a project with the name \"%s\".",
+					args[0]);
 			Application.out.println();
-		} else {
-			Application.projects.remove(pos);
+			return;
 		}
+		Project project =Application.projects.get(pos);
+		project.addTask(new Task(nextId(), args[1], false));
+	}
+
+	private static long nextId() {
+		return ++Application.lastId;
 	}
 
 	private static int getPosOf(String parameter) {

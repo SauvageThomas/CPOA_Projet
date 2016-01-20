@@ -24,6 +24,8 @@ public class Application implements Runnable {
 	
 	private static boolean alive = true;
 
+	public static int lastId = 0;
+
 	public Application() {
 	}
 
