@@ -1,5 +1,8 @@
 package app.command;
 
+import model.Argument;
+import model.KeyWord;
+
 public class CommandFactory {
 
 	public Command getCommandFromString(String commandLine) {

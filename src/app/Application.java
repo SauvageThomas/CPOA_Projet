@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Function;
 import model.Project;
 import app.command.Command;
 import app.command.CommandFactory;
@@ -31,6 +31,8 @@ public class Application implements Runnable {
 
 	public void run() {
 
+		CommandFactory factory = new CommandFactory();
+
 		while (alive) {
 			out.print("> ");
 			out.flush();
@@ -41,26 +43,23 @@ public class Application implements Runnable {
 				throw new RuntimeException(e);
 			}
 
-			CommandFactory factory = new CommandFactory();
-
 			Command command = factory.getCommandFromString(input);
 
 			if (command == null) {
 				Function.error(input);
 			} else {
-				command.execute();
+				try {
+					command.execute();
+				} catch (NoSuchMethodException | SecurityException
+						| IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {
+					out.print("An error appeared.\n");
+				}
 			}
 		}
-
 	}
 
 	public static void kill() {
 		alive = false;
 	}
-
-	public static void main(String[] args) {
-		new Thread(Application.instance).start();
-		;
-	}
-
 }

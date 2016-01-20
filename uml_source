@@ -1,0 +1,113 @@
+@startuml
+class Function {
+	+void error(String input)
+	+void show()
+	+void addTask(String parameter)
+	-long nextId()
+	-int getPosOf(String parameter)
+	+void addProject(String parameter)
+	+void today()
+	+void removeTask(String parameter)
+	+void removeProject(String parameter)
+	+void check(String parameter)
+	-void setDone(String parameter, boolean b)
+	+void uncheck(String parameter)
+	+void quit()
+	+void help()
+	+void deadline(String parameter)
+}
+
+
+class Application {
+	+Application instance
+	+BufferedReader in
+	+PrintWriter out
+	+List<Project> projects
+	-boolean alive
+	+int lastId
+	+Application()
+	+void run()
+	+void kill()
+}
+interface Runnable {
+}
+Runnable <|.. Application
+
+
+class Task {
+	-long id
+	-String description
+	-boolean done
+	-Date deadline
+	+Task(long id, String description, boolean done)
+	+long getId()
+	+String getDescription()
+	+boolean isDone()
+	+void setDone(boolean done)
+	+Date getDeadline()
+	+void setDeadline(Date deadline)
+}
+
+
+class Project {
+	-String name
+	-ArrayList<Task> taskList
+	+Project(String name)
+	+List<Task> getList()
+	+void addTask(Task tache)
+	+String getName()
+	+void removeTask(Task tache)
+}
+
+enum KeyWord {
+	show
+	add
+	remove
+	check
+	uncheck
+	help
+	quit
+	deadline
+	today
+	+int getLen()
+	+int getLenArg(Argument arg)
+	+boolean hasArgument()
+	+Method getAssociatedFunction(Argument arg)
+}
+
+
+class CommandFactory {
+	+Command getCommandFromString(String commandLine)
+}
+
+
+class Command {
+	-KeyWord keyWord
+	-Argument arg
+	-String parameter
+	+String toString()
+	~Command(KeyWord keyWord)
+	~Command(KeyWord keyWord, Argument arg, String parameter)
+	~Command(KeyWord keyWord, String parameter)
+	+KeyWord getKeyWord()
+	+Argument getArg()
+	+String getParameter()
+	+void execute()
+}
+
+
+enum Argument {
+	project
+	task
+}
+
+package Model {
+
+}
+
+
+
+
+
+@enduml
+

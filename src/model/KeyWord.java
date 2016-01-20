@@ -1,6 +1,8 @@
-package app.command;
+package model;
 
-import model.Function;
+import java.lang.reflect.Method;
+
+import app.Function;
 
 /**
  * This enum contains the differents keywords (the first word of the command)
@@ -15,8 +17,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.show();
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("show");
 		}
 	},
 	add {
@@ -38,15 +41,15 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
 			switch (arg) {
 			case task:
-				Function.addTask(parameter);
-				break;
+				return Function.class.getMethod("addTask", String.class);
 			case project:
-				Function.addProject(parameter);
-				break;
+				return Function.class.getMethod("addProject", String.class);
 			}
+			return null;
 
 		}
 	},
@@ -61,15 +64,15 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
 			switch (arg) {
 			case task:
-				Function.removeTask(parameter);
-				break;
+				return Function.class.getMethod("removeTask", String.class);
 			case project:
-				Function.removeProject(parameter);
-				break;
+				return Function.class.getMethod("removeProject", String.class);
 			}
+			return null;
 
 		}
 	},
@@ -80,8 +83,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.check(parameter);
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("check", String.class);
 		}
 	},
 	uncheck {
@@ -91,8 +95,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.uncheck(parameter);
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("uncheck", String.class);
 		}
 	},
 	help {
@@ -102,8 +107,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.help();
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("help");
 		}
 	},
 	quit {
@@ -113,8 +119,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.quit();
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("quit");
 		}
 	},
 	deadline {
@@ -124,8 +131,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.deadline(parameter);
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("deadline", String.class);
 		}
 	},
 	today {
@@ -136,8 +144,9 @@ public enum KeyWord {
 		}
 
 		@Override
-		public void execute(Argument arg, String parameter) {
-			Function.today();
+		public Method getAssociatedFunction(Argument arg)
+				throws NoSuchMethodException, SecurityException {
+			return Function.class.getMethod("today");
 		}
 	};
 
@@ -171,6 +180,7 @@ public enum KeyWord {
 		return false;
 	}
 
-	public abstract void execute(Argument arg, String parameter);
+	public abstract Method getAssociatedFunction(Argument arg)
+			throws NoSuchMethodException, SecurityException;
 
 }

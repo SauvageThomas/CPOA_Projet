@@ -1,12 +1,12 @@
-package model;
+package app;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ListIterator;
 
-import app.Application;
-import app.command.Argument;
+import model.Project;
+import model.Task;
 
 public class Function {
 
