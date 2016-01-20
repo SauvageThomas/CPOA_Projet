@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import app.Application;
-import app.TaskList;
 
 public final class ApplicationTest {
 	public static final String PROMPT = "> ";
@@ -34,7 +33,6 @@ public final class ApplicationTest {
 				new PipedInputStream(inStream)));
 		PrintWriter out = new PrintWriter(new PipedOutputStream(outStream),
 				true);
-		//TaskList taskList = new TaskList(in, out, new PrintWriter(System.err));
 		Application app = new Application();
 		Application.in = in;
 		Application.out = out;
