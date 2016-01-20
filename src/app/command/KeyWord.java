@@ -42,8 +42,10 @@ public enum KeyWord {
 			switch (arg) {
 			case task:
 				Function.addTask(parameter);
+				break;
 			case project:
 				Function.addProject(parameter);
+				break;
 			}
 
 		}
@@ -63,8 +65,10 @@ public enum KeyWord {
 			switch (arg) {
 			case task:
 				Function.removeTask(parameter);
+				break;
 			case project:
 				Function.removeProject(parameter);
+				break;
 			}
 
 		}
